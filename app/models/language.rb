@@ -11,5 +11,6 @@
 class Language < ActiveRecord::Base
   has_many :articles, dependent: :destroy
 
-  validates :name, presence: true
+  validates_presence_of :name
+  validates_uniqueness_of :name, case_sensitive: false
 end
