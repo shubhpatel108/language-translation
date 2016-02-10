@@ -38,6 +38,17 @@ class CategoriesControllerTest < ActionController::TestCase
     assert_template(:new)
   end
 
+  test "should not create a duplicate category with same name" do
+    assert_difference('Category.count', 1) do
+      2.times {
+        post :create, category: {name: "Books"}
+      }
+    end
+
+    assert_equal "Sorry, failed to create category due to errors.", flash[:error]
+    assert_template(:new)
+  end
+
   test "should update category name" do
     category = create(:category, name: "Books")
 
