@@ -9,22 +9,38 @@ class API::ArticlesControllerTest < ActionController::TestCase
     @user = create(:user)
     @user.add_role :admin
     @language = create(:language, name: 'Chuukese')
+    @category = create(:category, name: 'Places')
   end
 
   def teardown
     User.delete_all
     Article.delete_all
+    Language.delete_all
+    Category.delete_all
+  end
+
+  def upload_image(image_name)
+    Rack::Test::UploadedFile.new(
+        File.join(Rails.root, 'test', 'support', 'picture', image_name)
+      )
+  end
+
+  def create_article(image_name = "logo.jpg")
+    create(:article,
+                 {
+                    english: "Cat",
+                    phonetic: "Tac",
+                    language_id: @language.id,
+                    category_id: @category.id,
+                    picture: upload_image(image_name)
+                 })
   end
 
   describe "Get #index" do
     describe "when all article renders" do
       before(:each) do
         3.times {
-          create(:article,
-                 {
-                     language_id: @language.id,
-                     picture: Rack::Test::UploadedFile.new(File.join(Rails.root, 'test', 'support', 'picture', 'logo.jpg'))
-                 })
+          create_article
         }
       end
 
@@ -40,13 +56,7 @@ class API::ArticlesControllerTest < ActionController::TestCase
   describe "Get #show" do
     describe "when fetch one article" do
       before(:each) do
-        @article = create(:article,
-                          {
-                              english: 'Cat',
-                              phonetic: "Tac",
-                              language_id: @language.id,
-                              picture: Rack::Test::UploadedFile.new(File.join(Rails.root, 'test', 'support', 'picture', 'logo.jpg'))
-                          })
+        @article = create_article
       end
 
       it "should return article attributes" do
@@ -106,13 +116,7 @@ class API::ArticlesControllerTest < ActionController::TestCase
 
   describe "PUT/PATCH #update" do
     before(:each) do
-      @article = create(:article,
-                        {
-                            english: 'Cat',
-                            phonetic: "Tac",
-                            language_id: @language.id,
-                            picture: Rack::Test::UploadedFile.new(File.join(Rails.root, 'test', 'support', 'picture', 'logo.jpg'))
-                        })
+      @article = create_article
     end
 
     describe "when is successfully updated" do
@@ -131,13 +135,7 @@ class API::ArticlesControllerTest < ActionController::TestCase
   describe "DELETE #destroy" do
     describe "delete" do
       before(:each) do
-        @article = create(:article,
-                          {
-                              english: 'Cat',
-                              phonetic: "Tac",
-                              language_id: @language.id,
-                              picture: Rack::Test::UploadedFile.new(File.join(Rails.root, 'test', 'support', 'picture', 'logo.jpg'))
-                          })
+        @article = create_article
       end
 
       it "render josn response for the deleted object" do
