@@ -53,7 +53,7 @@ class User < ActiveRecord::Base
 
   default_scope -> { order('created_at DESC') }
 
-  validates_uniqueness_of :username
+  validates_uniqueness_of :username, case_sensitive: false
 
   validates_presence_of :username, :first_name, :last_name, :organization_id
 
