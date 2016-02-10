@@ -12,5 +12,6 @@ class Organization < ActiveRecord::Base
   has_many :users
   has_many :countries
 
-  validates :name, presence: true
+  validates_presence_of :name
+  validates_uniqueness_of :name, case_sensitive: false
 end
