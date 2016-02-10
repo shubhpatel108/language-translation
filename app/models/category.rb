@@ -11,7 +11,8 @@
 class Category < ActiveRecord::Base
   has_many :articles
 
-  validates :name, presence: true
+  validates_presence_of :name
+  validates_uniqueness_of :name, case_sensitive: false
 
   # default order when calling the Category model
   default_scope -> { order('created_at DESC') }
