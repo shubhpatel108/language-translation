@@ -36,6 +36,14 @@ class CountriesControllerTest < ActionController::TestCase
     end
   end
 
+  test "should not create a duplicate country associated with same organization" do
+    assert_difference('Country.count', 1) do
+      2.times {
+        post :create, country: {name: 'Albania'}
+      }
+    end
+  end
+
   test "should delete country along with all sites under that country" do
     country = Country.create!({name: 'Azerbaijan', organization_id: @user.organization.id })
     site = Site.create!({country_id: country.id, name:'Leh'})
