@@ -16,4 +16,5 @@ class Country < ActiveRecord::Base
   has_many :sites, dependent: :destroy
 
   validates_presence_of :name, :organization_id
+  validates_uniqueness_of :name, case_sensitive: false, scope: :organization_id
 end
