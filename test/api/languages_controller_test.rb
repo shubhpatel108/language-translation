@@ -15,12 +15,16 @@ class API::LanguagesControllerTest < ActionController::TestCase
     Language.delete_all
   end
 
+  def create_language(name = "Chuukese")
+    create(:language, { name: name })
+  end
+
   describe "Get #index" do
     describe "when all language renders" do
       before(:each) do
-        3.times {
-          create(:language, { name: "Chuukese" })
-        }
+        3.times do |index|
+          create_language("Chuukese#{index}")
+        end
       end
 
       it "return 3 records" do
@@ -35,7 +39,7 @@ class API::LanguagesControllerTest < ActionController::TestCase
   describe "Get #show" do
     describe "when fetch one language" do
       before(:each) do
-        @language = create(:language, name: "Chuukese")
+        @language = create_language
       end
 
       it "should return language attributes" do
@@ -86,7 +90,7 @@ class API::LanguagesControllerTest < ActionController::TestCase
 
   describe "PUT/PATCH #update" do
     before(:each) do
-      @language = create(:language, name: "Chuukese")
+      @language = create_language
     end
 
     describe "when is successfully updated" do
@@ -119,7 +123,7 @@ class API::LanguagesControllerTest < ActionController::TestCase
   describe "DELETE #destroy" do
     describe "delete" do
       before(:each) do
-        @language = create(:language, name: "Chuukese")
+        @language = create_language("Chuukese1")
       end
 
       it "render josn response for the deleted object" do
