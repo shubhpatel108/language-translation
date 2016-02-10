@@ -15,12 +15,16 @@ class API::CategoriesControllerTest < ActionController::TestCase
     Category.delete_all
   end
 
+  def create_category(name = "Places")
+    create(:category, { name: name })
+  end
+
   describe "Get #index" do
     describe "when all category renders" do
       before(:each) do
-        3.times {
-          create(:category, { name: "Places" })
-        }
+        3.times do |index|
+          create_category("Category#{index}")
+        end
       end
 
       it "return 3 records" do
@@ -35,7 +39,7 @@ class API::CategoriesControllerTest < ActionController::TestCase
   describe "Get #show" do
     describe "when fetch one category" do
       before(:each) do
-        @category = create(:category, name: "Places")
+        @category = create_category
       end
 
       it "should return category attributes" do
@@ -86,7 +90,7 @@ class API::CategoriesControllerTest < ActionController::TestCase
 
   describe "PUT/PATCH #update" do
     before(:each) do
-      @category = create(:category, name: "Places")
+      @category = create_category
     end
 
     describe "when is successfully updated" do
@@ -119,7 +123,7 @@ class API::CategoriesControllerTest < ActionController::TestCase
   describe "DELETE #destroy" do
     describe "delete" do
       before(:each) do
-        @category = create(:category, name: "Places")
+        @category = create_category
       end
 
       it "render josn response for the deleted object" do
